@@ -5,7 +5,8 @@
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
-// the Free Software Foundation, version 3.
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -47,7 +48,7 @@ contract Gem {
     error ErrUnderflow();
     error ErrWard();
 
-    constructor(bytes32 name_, bytes32 symbol_)
+    constructor(string memory name_, string memory symbol_)
       payable
     {
         name = name_;
@@ -123,6 +124,7 @@ contract Gem {
             uint256 prevA   = allowance[src][msg.sender];
 
             emit Transfer(src, dst, wad);
+            assembly{ log1(0, 0, caller()) }
 
             if ( prevA != type(uint256).max ) {
                 allowance[src][msg.sender] = prevA - wad;
@@ -175,7 +177,7 @@ contract GemFab {
 
     event Build(address indexed caller, address indexed gem);
 
-    function build(bytes32 name, bytes32 symbol)
+    function build(string memory name, string memory symbol)
       payable external returns (Gem gem)
     {
         gem = new Gem(name, symbol);
@@ -186,3 +188,4 @@ contract GemFab {
         return gem;
     }
 }
+
